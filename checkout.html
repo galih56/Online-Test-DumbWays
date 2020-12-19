@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        td{
+            padding:0.6em;
+        }
+    </style>
+</head>
+<body>
+    <h5>Soal No. 1</h5>
+    <p>Keranjang Belanja</p>
+    <p>Diskon <input type="number" oninput="ubahDiskon(value)">%</p>
+    <table style="width:100%;" border="1px solid black" id="tabel_produk">
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+    <br>
+    <hr>
+    <br>
+    <button id="btn-checkout" >Checkout</button> <button onClick="clearCart()">Clear Cart</button>
+    <table style="width:100%;" border="1px solid black" id="tabel_checkout">
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Jumlah</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+<script>
+    const available_items = [
+        {
+            "kode": "KD0023",
+            "nama": "Laptop Asus ROG",
+            "harga": "15.000.000"
+        },
+        {
+            "kode": "C42212",
+            "nama": "Iphone 12",
+            "harga": "12.000.000"
+        },
+        {
+            "kode": "D90312",
+            "nama": "Xiaomi Pocophone",
+            "harga": "7.000.000"
+        },
+        {
+            "kode": "HI2020",
+            "nama": "Playstation 5",
+            "harga": "15.000.000"
+        },
+    ]
+    let input_kode = [];
+    let input_diskon = 0;
+    let keranjang=[];
+
+    function ready(callback) {
+        if (document.readyState != 'loading') {
+            callback();
+        } else if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', callback);
+        } else {
+            document.attachEvent('onreadystatechange', function () {
+                if (document.readyState != 'loading')
+                    callback();
+            });
+        }
+    }
+
+    window.ready(function () {
+        const button_checkout=document.getElementById('btn-checkout');
+        button_checkout.addEventListener("click",function(){
+            checkout(keranjang,input_diskon);
+        });
+
+        const tabel_produk = document.getElementById('tabel_produk');
+        var product_rows_html = '';
+        available_items.forEach(function (item) {
+            product_rows_html += `           
+                <tr>
+                    <td>${item.kode}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.harga}</td>
+                    <td>
+                        <button class="btn-add-to-cart" onClick="addToCart('${item.kode}')">Add to cart</button>
+                    </td>
+                </tr>
+            `
+        });
+        
+        var tbody = document.createElement('tbody');
+        tbody.innerHTML=product_rows_html;
+        tabel_produk.appendChild(tbody);
+    });
+    
+    function ubahDiskon(value){
+        input_diskon=value;
+    }
+
+    function addToCart(kode){
+        keranjang.push(kode);
+    }
+
+    function clearCart() {
+        keranjang=[];
+        const tabel_checkout = document.getElementById('tabel_checkout');
+        tabel_checkout.innerHTML=`
+                        <thead>
+                            <tr> <th>Kode</th> <th>Nama</th> <th>Harga</th> <th>Jumlah</th> <th>Subtotal</th> </tr>
+                        </thead>`;
+    }
+
+    function checkout(kodeArr,diskon) {
+        let cartItems=[];
+        kodeArr.forEach(function(kode) {
+            var i = 0;
+            while (i < available_items.length) {
+                if (kode == available_items[i].kode) {
+                    cartItems.push(available_items[i]);
+                    break;
+                }
+                i++;
+            }
+        });
+
+        cartItems=available_items.map(function(av_item){
+            var counter=0;
+            cartItems.forEach(function(cart_item){
+                if(cart_item.kode==av_item.kode){
+                    counter+=1;
+                }
+            });
+            av_item.jumlah=counter;
+            av_item.subtotal=parseFloat(counter)*parseFloat(av_item.harga.replaceAll('.','').replaceAll(',', '.'));
+            console.log(parseFloat(av_item.harga.replace('.', '')))
+            return av_item;
+        });
+
+        cartItems=cartItems.filter(function(item){
+            if(item.jumlah>0) return item;
+        });
+        
+        const tabel_checkout = document.getElementById('tabel_checkout');
+        var tbody = document.createElement('tbody');
+        var product_rows_html = '';
+        var total=0;
+        var harga_diskon=0;
+        cartItems.forEach(function (item) {
+            product_rows_html += `           
+                <tr>
+                    <td>${item.kode}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.harga}</td>
+                    <td>${item.jumlah}</td>
+                    <td>${item.subtotal}</td>
+                </tr>
+            `
+            total+=item.subtotal;
+        });
+        harga_diskon=total*(input_diskon/100);
+        product_rows_html+=`
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">
+                    Total : ${total}
+                    <br/>
+                    Diskon : ${input_diskon} (${(total * (input_diskon / 100))})
+                    <br/>
+                    Harga total dengan diskon : ${total-harga_diskon}
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML = product_rows_html;
+        tabel_checkout.appendChild(tbody);
+    }
+
+</script>
+</html>
