@@ -1,3 +1,14 @@
+/*
+    Run query on terminal/shell
+    1. Open xampp shell
+    2. cd mysql\bin
+    3. run mysql.exe -u root --password
+    4. run show databases;
+    5. use test_dumbways
+    6. run show tables;
+    7. run use table_name
+    8. run query
+*/
 /*CREATE TABLE USER*/
 CREATE TABLE `test_dumbways`.`users` ( 
     `id` INT NOT NULL AUTO_INCREMENT ,  
@@ -34,8 +45,8 @@ VALUES
     (NULL, 'Cras quis leo nibh', ' Fusce ac magna nec orci rhoncus lacinia sed consectetur nisl. Donec dictum eget nisl quis egestas. \r\nNam sagittis nunc risus, vitae fringilla ante pulvinar in. Maecenas bibendum augue mollis, dapibus nibh quis, pellentesque mauris. \r\nSed augue augue, faucibus eget bibendum in, accumsan eget nulla. Vivamus iaculis urna erat, nec consequat quam dignissim vitae. \r\nDonec ac volutpat nunc. Aliquam vel condimentum tellus.', '2', '');
 
 /*SELECT USERS BESERTA POSTS*/
-SELECT * FROM users u 
-INNER JOIN posts p
+SELECT * FROM test_dumbways.users u 
+INNER JOIN test_dumbways.posts p
 ON u.id=p.id_user
 ORDER BY u.id DESC
 

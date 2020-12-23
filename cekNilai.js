@@ -11,7 +11,9 @@ function cekNilai(inputArr) {
             return this.total_nilai / (this.jumlah_nilai);
         }
     };
-    for (let i = 0; i < inputArr.length; i++) {
+
+    var i = 0;
+    while (i < inputArr.length) {
         const nilai = inputArr[i];
         counter.jumlah_nilai += 1;
         counter.total_nilai += nilai;
@@ -22,7 +24,9 @@ function cekNilai(inputArr) {
             console.log(`Nilai : ${nilai} => Tidak Lulus`);
             counter.tidak_lulus += 1;
         }
+        i++;
     }
+
     console.log(`
         Jumlah Nilai yang disubmit: ${counter.jumlah_nilai}
         Rata-rata Nilai: ${counter.mean().toFixed(2)}

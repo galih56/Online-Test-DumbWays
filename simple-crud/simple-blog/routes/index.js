@@ -7,9 +7,9 @@ router.get('/', function (req, res, next) {
   dbConn.query('SELECT * FROM posts ORDER BY id desc', function (err, rows) {
     if (err) {
       req.flash('error', err);
-      res.render('index', { data: '' });
+      res.render('index', { data: '', session: req.session });
     } else {
-      res.render('index', { data: rows });
+      res.render('index', { data: rows, session: req.session });
     }
   });
 });

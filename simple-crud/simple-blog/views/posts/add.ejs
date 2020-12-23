@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body class="container" style="margin-top: 50px;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <a class="navbar-brand" href="#">Blogger</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                   <a class="nav-link" href="/posts">Posts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <% if (messages.error) { %>
     <div class="alert alert-danger" role="alert">
         <%- messages.error %>
@@ -17,14 +31,18 @@
             Add Book
         </div>
         <div class="card-body">
-            <form action="/books/add" method="post">
+            <form action="/posts/add" method="POST" enctype="multipart/form-data" >
                 <div class="form-group">
                     <label>Title:</label>
                     <input type="text" class="form-control" name="title" value="<%- title !='' ? title : '' %>" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label>Content:</label>
-                    <textarea name="content" class="form-control" cols="30" rows="4" class="form-control"><%- content !='' ? content : '' %></textarea>
+                    <textarea name="content" cols="30" rows="4" class="form-control"><%- content !='' ? content : '' %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Photo:</label>
+                    <input name="photo" accept="image/*" type="file" class="form-control" >
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-info" value="Add" />

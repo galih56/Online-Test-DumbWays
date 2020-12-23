@@ -17,7 +17,7 @@ Untuk daftar SQL yang telah dibuat, dapat dilihat pada folder simple-crud/simple
 untuk menjalankan project CRUD, anda harus menggunakan terminal dan arahkan directory ke folder project simple-crud/simple-blog. Kemudian jalankan npm start.
 
 *Catatan* : 
-    - Fitur login dengan sessionnya belum selesai dikerjakan.
+    - Upload file gambar untuk fitur create,update, dan user file belum selesai.
     - Untuk basic CRUD dapat diakses melalui url /posts
 
 

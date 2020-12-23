@@ -1,17 +1,25 @@
 var express = require('express');
 var router = express.Router();
-var dbConn = require('../config/db');
+var dbConn = require('../../config/db');
 
-router.get('/', function (req, res, next) {
+// middleware function to check for logged-in users
+var sessionChecker = (req, res, next) => {
+    if (req.session.user) {
+        res.redirect('/');
+    } else {
+        next();
+    }
+};
+
+router.get('/', sessionChecker, function (req, res) {
     res.render('users/login', {
         email: '',
     })
 })
 
-router.post('/', function (req, res, next) {
+router.post('/', sessionChecker, function (req, res) {
     var email = req.body.email;
     var password = req.body.password;
-    var confirmPassword = req.body.confirmPassword;
     let errors = false;
 
     if (email.length === 0 || password.length === 0) {
@@ -22,23 +30,16 @@ router.post('/', function (req, res, next) {
         });
     }
 
-    if (password != confirmPassword) {
-        errors = true;
-        req.flash('error', "Please enter the correct password confirmation");
-        res.render('posts/add', {
-            email: email,
-        });
-    }
 
     if (errors == true || email && password) {
         // check if user exists
         dbConn.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], function (error, results, fields) {
             if (results.length > 0) {
-                req.session.loggedin = true;
-                req.session.email = email;
+                req.session.user = results[0];
                 res.redirect('/posts');
             } else {
-                res.send('Incorrect email and/or Password!');
+                req.flash('error', 'Incorrect email and/or Password!');
+                res.redirect('/login');
             }
             res.end();
         });
@@ -47,5 +48,5 @@ router.post('/', function (req, res, next) {
         res.end();
     }
 });
-
+// galihindra650@gmail.com
 module.exports = router;

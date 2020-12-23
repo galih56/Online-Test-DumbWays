@@ -14,4 +14,4 @@ function cetakPola(num) {
     }
 }
 
-cetakPola(10)
+cetakPola(10);

@@ -1,26 +1,35 @@
 var express = require('express');
 var router = express.Router();
 var dbConn = require('../config/db');
+var multer = require('multer');
+var path = require('path');
+
+// middleware function to check for logged-in users
+var sessionChecker = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+};
 
 // display posts page
-router.get('/', function (req, res, next) {
-    dbConn.query('SELECT * FROM posts ORDER BY id desc', function (err, rows) {
-
+router.get('/', sessionChecker, function (req, res) {
+    dbConn.query('SELECT * FROM posts WHERE id_user=' + req.session.user.id + ' ORDER BY id desc', function (err, rows) {
         if (err) {
             req.flash('error', err);
             // render to views/posts/index.ejs
-            res.render('posts', { data: '' });
+            res.render('posts', { data: '', session: req.session });
         } else {
             // render to views/posts/index.ejs
-            res.render('posts', { data: rows });
+            res.render('posts', { data: rows, session: req.session });
         }
     });
 });
 
 // display add post page
-router.get('/add', function (req, res, next) {
+router.get('/add', sessionChecker, function (req, res) {
     // render to add.ejs
-    console.log('get /add')
     res.render('posts/add', {
         title: '',
         content: ''
@@ -28,13 +37,13 @@ router.get('/add', function (req, res, next) {
 })
 
 // add a new post
-router.post('/add', function (req, res, next) {
+router.post('/add', function (req, res) {
 
     let title = req.body.title;
     let content = req.body.content;
     let errors = false;
 
-    if (title.length === 0 || content.length === 0) {
+    if (!title || !content || title.length == 0 || content.length == 0) {
         errors = true;
 
         // set flash message
@@ -51,11 +60,16 @@ router.post('/add', function (req, res, next) {
 
         var form_data = {
             title: title,
-            content: content
+            content: content,
+            id_user: req.session.user.id
         }
 
         // insert query
-        dbConn.query('INSERT INTO posts SET ?', form_data, function (err, result) {
+        dbConn.query('INSERT INTO posts SET ?', form_data, function (err, result, row) {
+            console.log('result : ', result.insertId, result);
+            console.log('row : ', row);
+            console.log('__dirname : ', __dirname + './../public/images/');
+
             //if(err) throw err
             if (err) {
                 req.flash('error', err)
@@ -64,20 +78,28 @@ router.post('/add', function (req, res, next) {
                 res.render('posts/add', {
                     title: form_data.title,
                     content: form_data.content
-                })
+                });
             } else {
+                //set storage engine
+                // const storage = multer.diskStorage({
+                //     destination: path.join(__dirname + './../public/images/'),
+                //     filename: function (req, file, cb) {
+                //         cb(null, result.insertId +
+                //             path.extname(file.originalname));
+                //     }
+                // });
+                // multer({ storage: storage }).single('photo')
                 req.flash('success', 'post successfully added');
                 res.redirect('/posts');
             }
         })
     }
-})
+}, sessionChecker);
 
 // display edit post page
-router.get('/edit/(:id)', function (req, res, next) {
+router.get('/edit/(:id)', sessionChecker, function (req, res) {
 
     let id = req.params.id;
-
     dbConn.query('SELECT * FROM posts WHERE id = ' + id, function (err, rows, fields) {
         if (err) throw err
 
@@ -100,7 +122,7 @@ router.get('/edit/(:id)', function (req, res, next) {
 })
 
 // update post data
-router.post('/update/:id', function (req, res, next) {
+router.post('/update/:id', sessionChecker, function (req, res) {
 
     let id = req.params.id;
     let title = req.body.title;
@@ -148,7 +170,7 @@ router.post('/update/:id', function (req, res, next) {
 })
 
 // display edit post page
-router.get('/show/(:id)', function (req, res, next) {
+router.get('/show/(:id)', function (req, res) {
 
     let id = req.params.id;
 
@@ -167,13 +189,14 @@ router.get('/show/(:id)', function (req, res, next) {
                 title_page: 'Show post',
                 id: rows[0].id,
                 title: rows[0].title,
-                content: rows[0].content
+                content: rows[0].content,
+                session: req.session
             })
         }
     })
 })
 // delete post
-router.get('/delete/(:id)', function (req, res, next) {
+router.get('/delete/(:id)', sessionChecker, function (req, res) {
 
     let id = req.params.id;
 
