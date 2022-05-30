@@ -1,4 +1,33 @@
 # Online-Test-DumbWays
+An online bootcamp platform DumbWays.id opened recruitment. First time i heard about it, I didn't know what bootcamp was. So i applied to fulfill my curiosity. And did passed the coding test. I got interview invitation. Unfortunately i has to skip the interview because i had many exams to do in the available days for interview.
+
+## Task 1. 
+Simulate checkout feature. Built with html+vanilla js
+
+## Soal 2.
+Find average and the numbers with specific values.
+run ```node cekNilai.js``` to know the result.
+
+## Soal 3.
+print a certain pattern
+run ```node cetakPola.js``` to know the result.
+
+## Soal 4.
+### A 
+Write CRUD queries.
+source code can be find in folder simple-crud/simple_crud.sql.
+
+### B
+Build crud application with framework/language you desire.
+I decided to use nodejs. 
+run ```npm start``` in the root directory.
+
+
+
+
+
+
+# Online-Test-DumbWays
 Jawaban untuk online test kloter 4 dari DumbWays.ID
 
 ## Soal 1. 
@@ -15,9 +44,3 @@ Untuk menjalankan cetakPola, anda harus menggunakan terminal dan arahkan directo
 Untuk daftar SQL yang telah dibuat, dapat dilihat pada folder simple-crud/simple_crud.sql.
 ### B
 untuk menjalankan project CRUD, anda harus menggunakan terminal dan arahkan directory ke folder project simple-crud/simple-blog. Kemudian jalankan npm start.
-
-*Catatan* : 
-    - Upload file gambar untuk fitur create,update, dan user file belum selesai.
-    - Untuk basic CRUD dapat diakses melalui url /posts
-
-
