@@ -1,5 +1,5 @@
 # Online-Test-DumbWays
-An online bootcamp platform DumbWays.id opened recruitment. First time i heard about it, I didn't know what bootcamp was. So i applied to fulfill my curiosity. And did passed the coding test. I got interview invitation. Unfortunately i had to skip the interview because i had many exams to do in those days when interverview was held.
+An online bootcamp platform DumbWays.id opened recruitment. First time i heard about it, I didn't know what bootcamp was. So i applied to fulfill my curiosity. And did pass the coding test. I got interview invitation. Unfortunately i had to skip the interview because i had many exams to do in those days when interverview was held.
 
 ## Task 1. 
 Simulate checkout feature. Built with html+vanilla js
