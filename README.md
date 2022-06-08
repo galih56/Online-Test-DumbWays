@@ -15,7 +15,7 @@ run ```node cetakPola.js``` to know the result.
 ## Soal 4.
 ### A 
 Write CRUD queries.
-source code can be find in folder simple-crud/simple_crud.sql.
+source code can be found in folder simple-crud/simple_crud.sql.
 
 ### B
 Build crud application with framework/language you desire.
